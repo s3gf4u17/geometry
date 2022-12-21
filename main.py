@@ -75,6 +75,10 @@ forms = {
     "vector":"undefined",
 }
 
+@app.get("/test")
+async def root():
+    return {"status":"connected"}
+
 @app.get("/{window}")
 async def root(window):
     return {"content": contents[window],"form":forms[window]}
