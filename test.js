@@ -5,6 +5,8 @@ var map = L.map('map',{minZoom:2,maxZoom:18,"zoomControl":false,"attributionCont
 var maplayer = null;
 // L.control.scale({"position":"bottomleft"}).addTo(map);
 // L.control.zoom({"position":"bottomright"}).addTo(map);
+var serverUrl = "";
+var httpSecurity = "http";
 
 function setMapUrl(url){
     try{map.removeLayer(maplayer);}catch(error){}
@@ -13,8 +15,50 @@ function setMapUrl(url){
     maplayer.addTo(map);
 }
 
+function changeServerUrl(){
+  serverUrl = document.getElementById('set1').value;
+  document.getElementById('set1').style.borderColor = "red";
+    fetch(httpSecurity+"://"+serverUrl+"/test").then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error('Something went wrong');;
+    })
+    .then(() => {
+      document.getElementById('set1').style.borderColor = "green";
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+}
+
+function swapSecurity(){
+  if (httpSecurity == "http") {httpSecurity = "https"}
+  else {httpSecurity = "http"}
+  document.getElementById('set1').style.borderColor = "red";
+    fetch(httpSecurity+"://"+serverUrl+"/test").then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error('Something went wrong');;
+    })
+    .then(() => {
+      document.getElementById('set1').style.borderColor = "green";
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+}
+
 async function createWindow(name,title){
-    resp = await fetch("http://localhost:8000/"+name).then((response)=>response.json()).then((data)=>{return data;});
+    if (name=="server") {
+      resp={
+        content:"Ustawienie połączenia z serwerem FastAPI backendu GisPortalu:",
+        form:"<input type='text' id='set1' placeholder='Adres IP/DNS serwera' onchange='changeServerUrl()'/><input type='checkbox' id='set1' name='settings' onclick='swapSecurity()'/><label for='set1'>Serwer Https</label></br>"
+      }
+    } else {
+      resp = await fetch(httpSecurity+"://"+serverUrl+"/"+name).then((response)=>response.json()).then((data)=>{return data;});
+    }
     // window
     const win = document.createElement("div");
     win.classList.add("window");
