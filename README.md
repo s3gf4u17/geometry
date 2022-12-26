@@ -1,1 +1,1 @@
-![CodeSize](https://img.shields.io/github/languages/code-size/s3gf4u17/gis-portal?style=flat-square)
+![CodeSize](https://img.shields.io/github/languages/code-size/s3gf4u17/geoportal-japonia?color=yellow&label=Code%20Size&style=flat-square)
