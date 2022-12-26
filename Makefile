@@ -1,4 +1,7 @@
-run:
+release:
 	npm run build
-	sudo rm -rf /var/www/html/*
-	sudo cp -r build/* /var/www/html/
+	mkdir release
+	cp -r build/* release/
+	pyinstaller main.py --onefile
+	cp -r dist/* release/
+	rm -rf build/ dist/
