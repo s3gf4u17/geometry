@@ -1,6 +1,0 @@
-polaczenie z serwerem w cookies
-usstawienia (dodawanie widgetow)
-powiadomienie o braku polaczenia z serwerem (domyslne content i form w stylu error?)
-dodawanie warstw geojson
-dodawanie warstw raster
-przykladowy plik konfiguracyjny
