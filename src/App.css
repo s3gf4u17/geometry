@@ -1,0 +1,94 @@
+#map{
+  position: absolute;
+  top: 33px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.fa-solid{
+  color: royalblue;
+}
+
+.PrimaryBar{
+  width: 100%;
+  padding-top: 7px;
+  height: 23px;
+  font-size: 14px;
+  background-color: white;
+  z-index: 3;
+  border-bottom: 3px ridge royalblue;
+}
+
+.BarButton{
+  margin-left: 10px;
+  width: max-content;
+  display: inline-block;
+}
+
+.BarButton:hover{
+  text-decoration: underline;
+  text-decoration-color: royalblue;
+  color: royalblue;
+  cursor: pointer;
+}
+
+.window{
+  width: 400px;
+  position: absolute;
+  background-color: white;
+  border: 3px ridge royalblue;
+  top: 50%;
+  z-index: 400;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.window-header {
+  padding: 6px 4px;
+  height: 16px;
+  z-index: 10;
+  font-size: 14px;
+  background-color: royalblue;
+  color: white;
+  border-bottom: 3px ridge royalblue;
+}
+
+.window-content {
+  padding: 4px 2px;
+  font-size: 14px;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.window-title{
+  width: max-content;
+}
+
+.window-title:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: white;
+}
+
+input[type=radio]{
+  accent-color: royalblue;
+  cursor: pointer;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+label{
+  cursor: pointer;
+}
+
+input[type=file]{
+  margin-top: 6px;
+  margin-left: 4px;
+}
+
+button{
+  margin-top: 6px;
+  margin-left: 4px;
+  margin-bottom: 4px;
+}
