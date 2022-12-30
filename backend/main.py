@@ -30,7 +30,7 @@ async def root(file: UploadFile):
 @app.get("/geojson/{filename}")
 async def root(filename: str):
     with open("data.geojson/"+filename,"rb") as f:
-        geojson = json.loads(f.read())
+        geojson=json.loads(f.read())
     return {"file":geojson}
 
 ### GEOTIFF
@@ -55,5 +55,5 @@ async def root(file: UploadFile):
 @app.get("/geotiff/{filename}")
 async def root(filename: str):
     with open("data.geotiff/"+filename,"rb") as f:
-        geotiff = json.loads(f.read())
+        geotiff=f.read()
     return {"file":geotiff}
