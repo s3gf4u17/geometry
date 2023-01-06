@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <div class="container">
+        
+    Gis-Portal API endpoints
+
+    <div class="endpoint">
+        <div class="endpoint-header-get" onclick="expand(event)"> <span>GET</span> /geojson/</div>
+        <div class="endpoint-content-get">
+            get available geojson layers <br>
+            <b>request</b><br>
+            <textarea rows="1" readonly>http://127.0.0.1:8000/api/geojson/</textarea><br>
+            <b>response:</b><br>
+            <textarea rows="10" readonly>Status: 200 OK
+Content-Type: "application/json"
+[
+    {
+        source: "test1.geojson"
+    },
+    {
+        source: "test2.geojson"
+    },
+]</textarea>
+        </div>
+    </div>
+    <div class="endpoint">
+        <div class="endpoint-header-get" onclick="expand(event)"><span>GET</span> /geotiff/</div>
+        <div class="endpoint-content-get">
+            get available geotiff layers <br>
+            <b>request:</b><br>
+            <textarea rows="1" readonly>http://127.0.0.1:8000/api/geotiff/</textarea><br>
+            <b>response:</b> <br>
+            <textarea rows="10" readonly>Status: 200 OK
+Content-Type: "application/json"
+[
+    {
+        source: "test1.geojson"
+    },
+    {
+        source: "test2.geojson"
+    },
+]</textarea>
+        </div>
+    </div>
+</div>
+</body>
+</html>
