@@ -114,8 +114,22 @@ Content-Type: "application/json"
             <textarea rows="4" readonly>Status: 200 OK
 Content-Type: "application/json"
 
-// GEOJSON FILE CONTENTS
-</textarea>
+// GEOJSON FILE CONTENTS</textarea>
+        </div>
+    </div>
+
+
+    <div class="endpoint">
+        <div class="endpoint-header-get" onclick="expand(event)"><span>GET</span> /geotiff/{layerName}</div>
+        <div class="endpoint-content-get">
+            get contents of existing geotiff layer <br>
+            <b>request:</b><br>
+            <textarea rows="1" readonly>http://127.0.0.1:8000/api/geotiff/test1.tif</textarea><br>
+            <b>response:</b> <br>
+            <textarea rows="4" readonly>Status: 200 OK
+Content-Type: "text/plain"
+
+// GEOTIFF FILE CONTENTS</textarea>
         </div>
     </div>
 
