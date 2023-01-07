@@ -36,12 +36,12 @@ func GeotiffLayers(w http.ResponseWriter, r *http.Request) {
 		for _,file := range files {if !file.IsDir() {layers=append(layers,model.GeoTiffLayer{file.Name()})}}
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(layers)
-	} else if source == "" && method == "POST" { // create new geojson layer
+	} else if source == "" && method == "POST" { // create new geotiff layer
 		file,header,_:=r.FormFile("file")
 		fmt.Printf("%s",header.Filename)
 		ondisk,_:=os.Create("data/geotiff/"+header.Filename)
 		io.Copy(ondisk,file)
-	} else if source != "" && method == "GET" { // read geojson layer
+	} else if source != "" && method == "GET" { // read geotiff layer
 		var valid bool = isValid(source)
 		if valid {http.ServeFile(w,r,"data/geotiff/"+source)}
 	}
