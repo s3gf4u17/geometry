@@ -9,7 +9,7 @@ import "fmt"
 import "os"
 import "io"
 
-func isValid(source string) bool {
+func isValidGeojson(source string) bool {
 	files,_:=ioutil.ReadDir("data/geojson")
 	for _,file := range files {
 		if !file.IsDir() && file.Name() == source {return true}
@@ -32,7 +32,7 @@ func GeojsonLayers(w http.ResponseWriter, r *http.Request) {
 		ondisk,_:=os.Create("data/geojson/"+header.Filename)
 		io.Copy(ondisk,file)
 	} else if source != "" && method == "GET" { // read geojson layer
-		var valid bool = isValid(source)
+		var valid bool = isValidGeojson(source)
 		if valid {http.ServeFile(w,r,"data/geojson/"+source)}
 	}
 }

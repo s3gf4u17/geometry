@@ -9,7 +9,7 @@ import "fmt"
 import "os"
 import "io"
 
-func isValid(source string) bool {
+func isValidGeotiff(source string) bool {
 	files,_:=ioutil.ReadDir("data/geotiff")
 	for _,file := range files {
 		if !file.IsDir() && file.Name() == source {return true}
@@ -32,7 +32,7 @@ func GeotiffLayers(w http.ResponseWriter, r *http.Request) {
 		ondisk,_:=os.Create("data/geotiff/"+header.Filename)
 		io.Copy(ondisk,file)
 	} else if source != "" && method == "GET" { // read geotiff layer
-		var valid bool = isValid(source)
+		var valid bool = isValidGeotiff(source)
 		if valid {http.ServeFile(w,r,"data/geotiff/"+source)}
 	}
 }
