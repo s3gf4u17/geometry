@@ -20,7 +20,7 @@ class App:
         pg.display.gl_set_attribute(pg.GL_CONTEXT_MINOR_VERSION, 3)
         pg.display.gl_set_attribute(pg.GL_CONTEXT_PROFILE_MASK,
                                     pg.GL_CONTEXT_PROFILE_CORE)
-        pg.display.set_mode((900,700), pg.OPENGL|pg.DOUBLEBUF)
+        pg.display.set_mode((640,480), pg.OPENGL|pg.DOUBLEBUF)
         self.clock = pg.time.Clock()
 
         self.cube_mesh = CubeMesh()
@@ -28,12 +28,12 @@ class App:
         #initialise opengl
         glClearColor(0.1, 0.2, 0.2, 1)
         
-        self.shader = self.createShader("python/shaders/shader.vert", "python/shaders/shader.frag")
+        self.shader = self.createShader("shaders/shader.vert", "shaders/shader.frag")
         glUseProgram(self.shader)
         glUniform1i(glGetUniformLocation(self.shader, "imageTexture"), 0)
         glEnable(GL_DEPTH_TEST)
 
-        self.wood_texture = Material("python/textures/izdeb.jpg")
+        self.wood_texture = Material("textures/stone.jpg")
 
         self.cube = Cube(
             position = [0,0,-3],
@@ -41,7 +41,7 @@ class App:
         )
 
         projection_transform = pyrr.matrix44.create_perspective_projection(
-            fovy = 45, aspect = 900/700, 
+            fovy = 45, aspect = 640/480, 
             near = 0.1, far = 10, dtype=np.float32
         )
         glUniformMatrix4fv(
