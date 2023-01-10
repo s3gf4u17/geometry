@@ -3,6 +3,7 @@ import pygame as pg
 from OpenGL.GL import *
 import numpy as np
 import ctypes
+from OpenGL.GL.shaders import compileProgram,compileShader
 
 # we need vertex shader and fragment shader
 # vertex runs once for the vertex, to position it on the screen (possibly transformations later)
@@ -40,6 +41,17 @@ class App:
         # initialize opengl
         glClearColor(1,0.2,0.2,1)
         self.mainLoop()
+
+    def createShader(self,vertexFilePath,fragmentFilePath):
+        with open(vertexFilePath,"r") as f:
+            vertex_src=f.readlines()
+        with open(fragmentFilePath,"r") as f:
+            fragment_src=f.readlines()
+        shader = compileProgram(
+            compileShader(vertex_src,GL_VERTEX_SHADER),
+            compileShader(fragment_src,GL_FRAGMENT_SHADER)
+        )
+        return shader
 
     def mainLoop(self):
         running=True
