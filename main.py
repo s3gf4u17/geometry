@@ -13,10 +13,10 @@ class Square:
     def __init__(self):
         # x, y, z, r, g, b, texX, texY
         self.vertices = np.array((
-            -0.9,-0.9,0.0,1.0,1.0,1.0,0.0,1.0,
-            0.9,-0.9,0.0,1.0,1.0,1.0,1.0,1.0,
-            0.9,0.9,0.0,1.0,1.0,1.0,1.0,0.0,
-            -0.9,0.9,0.0,1.0,1.0,1.0,0.0,0.0,
+            -0.2,-0.2,0.0,1.0,1.0,1.0,0.0,1.0,
+            0.2,-0.2,0.0,1.0,1.0,1.0,1.0,1.0,
+            0.2,0.2,0.0,1.0,1.0,1.0,1.0,0.0,
+            -0.2,0.2,0.0,1.0,1.0,1.0,0.0,0.0,
         ),dtype=np.float32)
         self.vertex_count=4
         self.vao=glGenVertexArrays(1)
@@ -66,11 +66,11 @@ class App:
         self.clock=pg.time.Clock()
         # initialize opengl
         glClearColor(0.1,0.2,0.2,1)
-        self.shader=self.createShader("shaders/triangle.vert","shaders/triangle.frag")
+        self.shader=self.createShader("python/shaders/shader.vert","python/shaders/shader.frag")
         glUseProgram(self.shader)
         glUniform1i(glGetUniformLocation(self.shader,"imageTexture"),0)
         self.triangle=Square()
-        self.wood_texture=Material("textures/wood.png")
+        self.texture=Material("python/textures/stone.jpg")
         self.mainLoop()
 
     def createShader(self,vertexFilePath,fragmentFilePath):
@@ -103,6 +103,7 @@ class App:
 
     def quit(self):
         self.triangle.destroy()
+        self.texture.destroy()
         glDeleteProgram(self.shader)
         pg.quit()
 
