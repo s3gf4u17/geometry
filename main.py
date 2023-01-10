@@ -13,9 +13,9 @@ class Triangle:
     def __init__(self):
         # x, y, z, r, g, b
         self.vertices = (
-            -0.5,-0.5,0.0,1.0,0.0,0.0, # vertex is not only position but also all other data connected to vertex
-            0.5,-0.5,0.0,0.0,1.0,0.0, # x and y go from -1 to 1 # z represents depth (either flat or no)
-            0.0,0.5,0.0,0.0,0.0,1.0,
+            -0.9,-0.9,0.0,1.0,0.0,0.0, # vertex is not only position but also all other data connected to vertex
+            0.9,-0.9,0.0,0.0,1.0,0.0, # x and y go from -1 to 1 # z represents depth (either flat or no)
+            0.9,0.9,0.0,0.0,0.0,1.0,
         )
         self.vertices=np.array(self.vertices,dtype=np.float32) # data type is perfect for c data reading
         self.vertex_count = 3
@@ -39,8 +39,8 @@ class App:
         pg.display.set_mode((640,480),pg.OPENGL|pg.DOUBLEBUF)
         self.clock=pg.time.Clock()
         # initialize opengl
-        glClearColor(1,0.2,0.2,1)
-        self.shader=self.createShader("shaders/traingle.vert","shaders/triangle.frag")
+        glClearColor(0.1,0.2,0.2,1)
+        self.shader=self.createShader("shaders/triangle.vert","shaders/triangle.frag")
         glUseProgram(self.shader)
         self.triangle=Triangle()
         self.mainLoop()
@@ -65,12 +65,17 @@ class App:
                     running=False
             # refresh screen
             glClear(GL_COLOR_BUFFER_BIT)
+            glUseProgram(self.shader)
+            glBindVertexArray(self.triangle.vao)
+            glDrawArrays(GL_TRIANGLES,0,self.triangle.vertex_count)
             pg.display.flip()
             # timing
             self.clock.tick(60)
         self.quit()
 
     def quit(self):
+        self.triangle.destroy()
+        glDeleteProgram(self.shader)
         pg.quit()
 
 if __name__ == "__main__":
