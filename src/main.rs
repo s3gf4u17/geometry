@@ -14,5 +14,13 @@ fn main() {
 
     io::stdin().read_line(&mut guess).expect("Failed to read line");
 
+    let guess: u32 = guess.trim().parse().expect("Not a number!");
+
     println!("You guessed {}",guess);
+
+    match guess.cmp(&secret) {
+        std::cmp::Ordering::Less => println!("Too small!"),
+        std::cmp::Ordering::Greater => println!("Too big!"),
+        std::cmp::Ordering::Equal => println!("You guessed correctly!"),
+    }
 }
