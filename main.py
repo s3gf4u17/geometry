@@ -9,6 +9,30 @@ from OpenGL.GL.shaders import compileProgram,compileShader
 # vertex runs once for the vertex, to position it on the screen (possibly transformations later)
 # fragment shader runs once per pixel and is responsible for calculating pixel's color
 
+class Square:
+    def __init__(self):
+        # x, y, z, r, g, b
+        self.vertices = np.array((
+            -0.9,-0.9,0.0,1.0,0.0,0.0,
+            0.9,-0.9,0.0,0.0,1.0,0.0,
+            0.9,0.9,0.0,0.0,0.0,1.0,
+            -0.9,0.9,0.0,0.0,0.0,1.0,
+        ),dtype=np.float32)
+        self.vertex_count=4
+        self.vao=glGenVertexArrays(1)
+        glBindVertexArray(self.vao)
+        self.vbo=glGenBuffers(1)
+        glBindBuffer(GL_ARRAY_BUFFER,self.vbo)
+        glBufferData(GL_ARRAY_BUFFER,self.vertices.nbytes,self.vertices,GL_STATIC_DRAW)
+        glEnableVertexAttribArray(0)
+        glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,24,ctypes.c_void_p(0))
+        glEnableVertexAttribArray(1)
+        glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,24,ctypes.c_void_p(12))
+    
+    def destroy(self):
+        glDeleteVertexArrays(1,(self.vao,))
+        glDeleteBuffers(1,(self.vbo,))
+
 class Triangle:
     def __init__(self):
         # x, y, z, r, g, b
@@ -67,7 +91,7 @@ class App:
             glClear(GL_COLOR_BUFFER_BIT)
             glUseProgram(self.shader)
             glBindVertexArray(self.triangle.vao)
-            glDrawArrays(GL_TRIANGLES,0,self.triangle.vertex_count)
+            glDrawArrays(GL_POLYGON,0,self.triangle.vertex_count)
             pg.display.flip()
             # timing
             self.clock.tick(60)
