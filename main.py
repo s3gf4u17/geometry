@@ -40,6 +40,9 @@ class App:
         self.clock=pg.time.Clock()
         # initialize opengl
         glClearColor(1,0.2,0.2,1)
+        self.shader=self.createShader("shaders/traingle.vert","shaders/triangle.frag")
+        glUseProgram(self.shader)
+        self.triangle=Triangle()
         self.mainLoop()
 
     def createShader(self,vertexFilePath,fragmentFilePath):
