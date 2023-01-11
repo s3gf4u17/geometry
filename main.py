@@ -23,18 +23,18 @@ class App:
         pg.display.set_mode((640,480), pg.OPENGL|pg.DOUBLEBUF)
         self.clock = pg.time.Clock()
         #initialise opengl
-        glClearColor(0.1, 0.2, 0.2, 1)
-        self.cube_mesh = Mesh("blender/sphere.obj")
+        glClearColor(0.1, 0.1, 0.1, 1)
+        self.cube_mesh = Mesh("blender/monke.obj")
         self.shader = self.createShader("shaders/shader.vert", "shaders/shader.frag")
         glUseProgram(self.shader)
         glUniform1i(glGetUniformLocation(self.shader, "imageTexture"), 0)
         glEnable(GL_DEPTH_TEST)
 
-        self.wood_texture = Material("textures/stone.jpg")
+        self.wood_texture = Material("textures/checked.jpg")
 
         self.cube = Cube(
             position = [0,0,-5],
-            eulers = [160,0,0]
+            eulers = [-20,0,0]
         )
 
         projection_transform = pyrr.matrix44.create_perspective_projection(
