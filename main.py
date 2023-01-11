@@ -22,22 +22,19 @@ class App:
                                     pg.GL_CONTEXT_PROFILE_CORE)
         pg.display.set_mode((640,480), pg.OPENGL|pg.DOUBLEBUF)
         self.clock = pg.time.Clock()
-
-        self.cube_mesh = CubeMesh()
-
         #initialise opengl
         glClearColor(0.1, 0.2, 0.2, 1)
-        
+        self.cube_mesh = Mesh("blender/untitled.obj")
         self.shader = self.createShader("shaders/shader.vert", "shaders/shader.frag")
         glUseProgram(self.shader)
         glUniform1i(glGetUniformLocation(self.shader, "imageTexture"), 0)
         glEnable(GL_DEPTH_TEST)
 
-        self.wood_texture = Material("textures/stone.jpg")
+        self.wood_texture = Material("textures/mitten.png")
 
         self.cube = Cube(
-            position = [0,0,-3],
-            eulers = [-25,0,0]
+            position = [0,0,-5],
+            eulers = [0,0,0]
         )
 
         projection_transform = pyrr.matrix44.create_perspective_projection(
@@ -76,12 +73,6 @@ class App:
             self.cube.eulers[2] += 0.25
             if self.cube.eulers[2] > 360:
                 self.cube.eulers[2] -= 360
-            self.cube.eulers[1] += 0.25
-            if self.cube.eulers[1] > 360:
-                self.cube.eulers[1] -= 360
-            self.cube.eulers[0] += 0.25
-            if self.cube.eulers[0] > 360:
-                self.cube.eulers[0] -= 360
             
             #refresh screen
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -106,7 +97,7 @@ class App:
                 )
             )
             glUniformMatrix4fv(self.modelMatrixLocation,1,GL_FALSE,model_transform)
-            # self.wood_texture.use()
+            self.wood_texture.use()
             glBindVertexArray(self.cube_mesh.vao)
             glDrawArrays(GL_TRIANGLES, 0, self.cube_mesh.vertex_count)
 
@@ -122,59 +113,11 @@ class App:
         glDeleteProgram(self.shader)
         pg.quit()
 
-class CubeMesh:
-    def __init__(self):
-        # x, y, z, s, t
-        self.vertices = (
-                -0.5, -0.5, -0.5, 0, 0,
-                 0.5, -0.5, -0.5, 1, 0,
-                 0.5,  0.5, -0.5, 1, 1,
-
-                 0.5,  0.5, -0.5, 1, 1,
-                -0.5,  0.5, -0.5, 0, 1,
-                -0.5, -0.5, -0.5, 0, 0,
-
-                -0.5, -0.5,  0.5, 0, 0,
-                 0.5, -0.5,  0.5, 1, 0,
-                 0.5,  0.5,  0.5, 1, 1,
-
-                 0.5,  0.5,  0.5, 1, 1,
-                -0.5,  0.5,  0.5, 0, 1,
-                -0.5, -0.5,  0.5, 0, 0,
-
-                -0.5,  0.5,  0.5, 1, 0,
-                -0.5,  0.5, -0.5, 1, 1,
-                -0.5, -0.5, -0.5, 0, 1,
-
-                -0.5, -0.5, -0.5, 0, 1,
-                -0.5, -0.5,  0.5, 0, 0,
-                -0.5,  0.5,  0.5, 1, 0,
-
-                 0.5,  0.5,  0.5, 1, 0,
-                 0.5,  0.5, -0.5, 1, 1,
-                 0.5, -0.5, -0.5, 0, 1,
-
-                 0.5, -0.5, -0.5, 0, 1,
-                 0.5, -0.5,  0.5, 0, 0,
-                 0.5,  0.5,  0.5, 1, 0,
-
-                -0.5, -0.5, -0.5, 0, 1,
-                 0.5, -0.5, -0.5, 1, 1,
-                 0.5, -0.5,  0.5, 1, 0,
-
-                 0.5, -0.5,  0.5, 1, 0,
-                -0.5, -0.5,  0.5, 0, 0,
-                -0.5, -0.5, -0.5, 0, 1,
-
-                -0.5,  0.5, -0.5, 0, 1,
-                 0.5,  0.5, -0.5, 1, 1,
-                 0.5,  0.5,  0.5, 1, 0,
-
-                 0.5,  0.5,  0.5, 1, 0,
-                -0.5,  0.5,  0.5, 0, 0,
-                -0.5,  0.5, -0.5, 0, 1
-            )
-        self.vertex_count = len(self.vertices)//5
+class Mesh:
+    def __init__(self, filename):
+        # x, y, z, s, t, nx, ny, nz
+        self.vertices = self.loadMesh(filename)
+        self.vertex_count = len(self.vertices)//8
         self.vertices = np.array(self.vertices, dtype=np.float32)
 
         self.vao = glGenVertexArrays(1)
@@ -182,12 +125,87 @@ class CubeMesh:
         self.vbo = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, self.vbo)
         glBufferData(GL_ARRAY_BUFFER, self.vertices.nbytes, self.vertices, GL_STATIC_DRAW)
-
+        #position
         glEnableVertexAttribArray(0)
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 20, ctypes.c_void_p(0))
-
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 32, ctypes.c_void_p(0))
+        #texture
         glEnableVertexAttribArray(1)
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 20, ctypes.c_void_p(12))
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 32, ctypes.c_void_p(12))
+    
+    def loadMesh(self, filename):
+
+        #raw, unassembled data
+        v = []
+        vt = []
+        vn = []
+        
+        #final, assembled and packed result
+        vertices = []
+
+        #open the obj file and read the data
+        with open(filename,'r') as f:
+            line = f.readline()
+            while line:
+                firstSpace = line.find(" ")
+                flag = line[0:firstSpace]
+                if flag=="v":
+                    #vertex
+                    line = line.replace("v ","")
+                    line = line.split(" ")
+                    l = [float(x) for x in line]
+                    v.append(l)
+                elif flag=="vt":
+                    #texture coordinate
+                    line = line.replace("vt ","")
+                    line = line.split(" ")
+                    l = [float(x) for x in line]
+                    vt.append(l)
+                elif flag=="vn":
+                    #normal
+                    line = line.replace("vn ","")
+                    line = line.split(" ")
+                    l = [float(x) for x in line]
+                    vn.append(l)
+                elif flag=="f":
+                    #face, three or more vertices in v/vt/vn form
+                    line = line.replace("f ","")
+                    line = line.replace("\n","")
+                    #get the individual vertices for each line
+                    line = line.split(" ")
+                    faceVertices = []
+                    faceTextures = []
+                    faceNormals = []
+                    for vertex in line:
+                        #break out into [v,vt,vn],
+                        #correct for 0 based indexing.
+                        l = vertex.split("/")
+                        position = int(l[0]) - 1
+                        faceVertices.append(v[position])
+                        texture = int(l[1]) - 1
+                        faceTextures.append(vt[texture])
+                        normal = int(l[2]) - 1
+                        faceNormals.append(vn[normal])
+                    # obj file uses triangle fan format for each face individually.
+                    # unpack each face
+                    triangles_in_face = len(line) - 2
+
+                    vertex_order = []
+                    """
+                        eg. 0,1,2,3 unpacks to vertices: [0,1,2,0,2,3]
+                    """
+                    for i in range(triangles_in_face):
+                        vertex_order.append(0)
+                        vertex_order.append(i+1)
+                        vertex_order.append(i+2)
+                    for i in vertex_order:
+                        for x in faceVertices[i]:
+                            vertices.append(x)
+                        for x in faceTextures[i]:
+                            vertices.append(x)
+                        for x in faceNormals[i]:
+                            vertices.append(x)
+                line = f.readline()
+        return vertices
     
     def destroy(self):
         glDeleteVertexArrays(1, (self.vao,))
