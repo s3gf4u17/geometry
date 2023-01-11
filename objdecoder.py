@@ -33,3 +33,5 @@ for element in f:
 
 ### merged
 ### x, y, z, s, t, nx, ny, nz
+
+print(merged)
