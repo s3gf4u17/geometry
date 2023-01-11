@@ -1,0 +1,91 @@
+// ownership
+
+// garbage collection - error free, faster write time, no control over memory, slower and upredictable runtime performance, larger program size
+// manual memory management - control over memory, faster runtime, smaller program size, eror prone, slower write time
+// ownership model - control over memory, error free, faster runtime, smaller program size, slower write time, high learning curve
+
+// ----- ownership rules -----
+// 1. each value in rust has a variable thats called its owner
+// 2. there can only be one owner at a time
+// 3. when the owner goes out of scope, the value will be dropped
+
+fn main () {
+    let a = 5; // stack variable
+    let b = a; // copy
+    println!("{} {}",a,b);
+    let s1 = String::from("string"); // heap variable 
+    let s2 = s1; // move ownership
+    let s3 = s2.clone(); // creates a clone instead of moving ownership
+    // ERROR println!("{} {}",s1,s2); - ownership transfered from s1 to s2
+    println!("{} {}",s2,s3);
+    takes_ownership(s3);
+    // println!("{} {}",s2,s3); - s3 ownership moved
+    makes_copy(b);
+    println!("{}",b); // b still can be used (its stored on a stack)
+    let s2=takes_and_gives_back(s2);
+    println!("{}",s2); // s2 can still be used (ownership returned)
+
+    let (len,s2) = calculate_length_ownership(s2);
+    println!("{} {} {} {}",s2,len,calculate_length_reference(&s2),s2);
+
+    let s5 = String::from("hello world!");
+    let hello = &s5[..5]; // string slices (here reference to the part of a string)
+    let world = &s5[6..];
+    let i = first_word(&s5);
+    println!("{} {} {} {}",s5,i,hello,world);
+    let fw = first_word_slice(&s5);
+    println!("{}-",fw);
+    let a : [i32;4] = [1,2,3,4];
+    let slicea = &a[..2];
+    println!("{}",slicea[1]);
+}
+
+fn takes_ownership(s: String) {
+    println!("{}",s);
+}
+
+fn makes_copy(i: i32) {
+    println!("{}",i);
+}
+
+fn takes_and_gives_back(s: String) -> String {
+    println!("{}",s);
+    s
+}
+
+fn calculate_length_ownership(s:String) -> (usize,String) {
+    (s.len(),s)
+}
+
+fn calculate_length_reference(s:&String) -> usize { // references do not take ownership (borrowing) - references are immutable by default, you can set it to mutable, but you can borrow mutable value only once in a scope
+    s.len()
+}
+
+// fn returns_reference() -> &'static String {
+//     String::from("hello") // string is only in scope of this function, so rust will drop it when function finishes (reference pointing to invalid memory) we have to use lifetime
+// }
+
+fn first_word(s:&String) -> usize { // return index to the last character of the word
+    let bytes = s.as_bytes();
+
+    for (i,&item) in bytes.iter().enumerate() {
+        if item==b' '{
+            return i;
+        }
+    }
+
+    s.len()
+}
+
+// slices do not take ownership
+fn first_word_slice(s:&str) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i,&item) in bytes.iter().enumerate() {
+        if item==b' '{
+            return &s[..i];
+        }
+    }
+
+    &s[..]
+}
