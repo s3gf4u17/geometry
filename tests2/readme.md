@@ -1,0 +1,1 @@
+if glfw window fails to open - restart machine
